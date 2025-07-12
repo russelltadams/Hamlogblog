@@ -8,6 +8,13 @@ Hamlogblog is a Flask-based web application designed for amateur radio operators
 
 Preferred communication style: Simple, everyday language.
 
+## Recent Changes
+
+### July 12, 2025
+- Fixed search function bug where contact details showed wrong contact information
+- Created comprehensive README.md with deployment, admin, and developer documentation
+- Search results now correctly track original contact indices from station log
+
 ## System Architecture
 
 ### Backend Architecture
