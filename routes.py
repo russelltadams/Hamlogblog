@@ -7,6 +7,7 @@ from app import app, admin_required, ADMIN_USERNAME, ADMIN_PASSWORD
 from adif_parser import parse_adif_file
 from qsl_generator import generate_qsl_card
 from models import load_station_log, save_station_log, load_blog_posts, save_blog_posts, merge_contacts
+from config_manager import load_config, save_config, get_config_value
 import logging
 
 @app.route('/')
@@ -397,3 +398,46 @@ def blog_delete(post_id):
     save_blog_posts(blog_posts)
     flash('Blog post deleted successfully!', 'success')
     return redirect(url_for('blog_management'))
+
+@app.route('/config_management')
+@admin_required
+def config_management():
+    """Configuration management page"""
+    config = load_config()
+    return render_template('config_management.html', config=config)
+
+@app.route('/config_update', methods=['POST'])
+@admin_required
+def config_update():
+    """Update configuration settings"""
+    config = load_config()
+    
+    # Station settings
+    config['station']['call_sign'] = request.form.get('call_sign', '').strip().upper()
+    config['station']['operator_name'] = request.form.get('operator_name', '').strip()
+    config['station']['qth'] = request.form.get('qth', '').strip()
+    config['station']['grid_square'] = request.form.get('grid_square', '').strip().upper()
+    config['station']['email'] = request.form.get('email', '').strip()
+    
+    # Site settings
+    config['site']['title'] = request.form.get('site_title', '').strip()
+    config['site']['subtitle'] = request.form.get('site_subtitle', '').strip()
+    config['site']['description'] = request.form.get('site_description', '').strip()
+    config['site']['admin_password'] = request.form.get('admin_password', '').strip()
+    
+    # QSL settings
+    config['qsl']['default_message'] = request.form.get('qsl_message', '').strip()
+    config['qsl']['equipment'] = request.form.get('equipment', '').strip()
+    config['qsl']['antenna'] = request.form.get('antenna', '').strip()
+    config['qsl']['power'] = request.form.get('power', '').strip()
+    
+    # Display settings
+    config['display']['contacts_per_page'] = int(request.form.get('contacts_per_page', 50))
+    config['display']['recent_contacts_limit'] = int(request.form.get('recent_contacts_limit', 10))
+    
+    if save_config(config):
+        flash('Configuration updated successfully! Changes will take effect after restart.', 'success')
+    else:
+        flash('Error saving configuration!', 'error')
+    
+    return redirect(url_for('config_management'))

@@ -1,0 +1,27 @@
+{
+  "station": {
+    "call_sign": "KM6KFX",
+    "operator_name": "Amateur Radio Operator",
+    "qth": "California, USA",
+    "grid_square": "CM87",
+    "email": "km6kfx@example.com"
+  },
+  "site": {
+    "title": "KM6KFX Hamlog",
+    "subtitle": "Amateur Radio Log & Activities",
+    "description": "Personal amateur radio logging and blog site",
+    "admin_password": "happyham"
+  },
+  "qsl": {
+    "default_message": "Thanks for the QSO! 73s",
+    "equipment": "IC-7300, Yaesu FT-991A",
+    "antenna": "Various wire antennas",
+    "power": "100W"
+  },
+  "display": {
+    "timezone": "UTC",
+    "date_format": "YYYY-MM-DD",
+    "contacts_per_page": 50,
+    "recent_contacts_limit": 10
+  }
+}

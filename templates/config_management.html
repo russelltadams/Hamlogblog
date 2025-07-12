@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+
+{% block title %}Configuration - {{ config.station.call_sign }} Admin{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h4><i class="fas fa-cog"></i> Station Configuration</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('config_update') }}">
+                    <!-- Station Information -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h5 class="border-bottom pb-2 mb-3"><i class="fas fa-radio"></i> Station Information</h5>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="call_sign" class="form-label">Call Sign *</label>
+                                <input type="text" class="form-control" id="call_sign" name="call_sign" 
+                                       value="{{ config.station.call_sign }}" required>
+                                <div class="form-text">Your amateur radio call sign (used for site title and admin login)</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="operator_name" class="form-label">Operator Name</label>
+                                <input type="text" class="form-control" id="operator_name" name="operator_name" 
+                                       value="{{ config.station.operator_name }}">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="qth" class="form-label">QTH (Location)</label>
+                                <input type="text" class="form-control" id="qth" name="qth" 
+                                       value="{{ config.station.qth }}" placeholder="e.g., California, USA">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="grid_square" class="form-label">Grid Square</label>
+                                <input type="text" class="form-control" id="grid_square" name="grid_square" 
+                                       value="{{ config.station.grid_square }}" placeholder="e.g., CM87">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" 
+                                       value="{{ config.station.email }}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Site Settings -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h5 class="border-bottom pb-2 mb-3"><i class="fas fa-globe"></i> Site Settings</h5>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="site_title" class="form-label">Site Title</label>
+                                <input type="text" class="form-control" id="site_title" name="site_title" 
+                                       value="{{ config.site.title }}">
+                                <div class="form-text">Appears in browser title and navigation</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="site_subtitle" class="form-label">Site Subtitle</label>
+                                <input type="text" class="form-control" id="site_subtitle" name="site_subtitle" 
+                                       value="{{ config.site.subtitle }}">
+                                <div class="form-text">Appears in footer and meta descriptions</div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="mb-3">
+                                <label for="site_description" class="form-label">Site Description</label>
+                                <textarea class="form-control" id="site_description" name="site_description" rows="2">{{ config.site.description }}</textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="admin_password" class="form-label">Admin Password</label>
+                                <input type="password" class="form-control" id="admin_password" name="admin_password" 
+                                       value="{{ config.site.admin_password }}">
+                                <div class="form-text">Password for admin login (username is your call sign)</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- QSL Settings -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h5 class="border-bottom pb-2 mb-3"><i class="fas fa-id-card"></i> QSL Card Settings</h5>
+                        </div>
+                        <div class="col-12">
+                            <div class="mb-3">
+                                <label for="qsl_message" class="form-label">Default QSL Message</label>
+                                <input type="text" class="form-control" id="qsl_message" name="qsl_message" 
+                                       value="{{ config.qsl.default_message }}">
+                                <div class="form-text">Message that appears on generated QSL cards</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="equipment" class="form-label">Equipment</label>
+                                <input type="text" class="form-control" id="equipment" name="equipment" 
+                                       value="{{ config.qsl.equipment }}" placeholder="e.g., IC-7300, FT-991A">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="antenna" class="form-label">Antenna</label>
+                                <input type="text" class="form-control" id="antenna" name="antenna" 
+                                       value="{{ config.qsl.antenna }}" placeholder="e.g., Dipole, Yagi">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="power" class="form-label">Power</label>
+                                <input type="text" class="form-control" id="power" name="power" 
+                                       value="{{ config.qsl.power }}" placeholder="e.g., 100W">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Display Settings -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h5 class="border-bottom pb-2 mb-3"><i class="fas fa-display"></i> Display Settings</h5>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="contacts_per_page" class="form-label">Contacts Per Page</label>
+                                <select class="form-select" id="contacts_per_page" name="contacts_per_page">
+                                    <option value="25" {% if config.display.contacts_per_page == 25 %}selected{% endif %}>25</option>
+                                    <option value="50" {% if config.display.contacts_per_page == 50 %}selected{% endif %}>50</option>
+                                    <option value="100" {% if config.display.contacts_per_page == 100 %}selected{% endif %}>100</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="recent_contacts_limit" class="form-label">Recent Contacts Limit</label>
+                                <select class="form-select" id="recent_contacts_limit" name="recent_contacts_limit">
+                                    <option value="5" {% if config.display.recent_contacts_limit == 5 %}selected{% endif %}>5</option>
+                                    <option value="10" {% if config.display.recent_contacts_limit == 10 %}selected{% endif %}>10</option>
+                                    <option value="15" {% if config.display.recent_contacts_limit == 15 %}selected{% endif %}>15</option>
+                                    <option value="20" {% if config.display.recent_contacts_limit == 20 %}selected{% endif %}>20</option>
+                                </select>
+                                <div class="form-text">Number of recent contacts shown on homepage</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Buttons -->
+                    <div class="row">
+                        <div class="col-12">
+                            <hr>
+                            <div class="d-flex justify-content-between">
+                                <a href="{{ url_for('admin_panel') }}" class="btn btn-secondary">
+                                    <i class="fas fa-arrow-left"></i> Back to Admin Panel
+                                </a>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Save Configuration
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="alert alert-info">
+            <h6><i class="fas fa-info-circle"></i> Configuration Notes</h6>
+            <ul class="mb-0">
+                <li><strong>Call Sign:</strong> Used as admin username and appears throughout the site</li>
+                <li><strong>Admin Password:</strong> Used with your call sign to access admin features</li>
+                <li><strong>QSL Settings:</strong> Customize the appearance and content of generated QSL cards</li>
+                <li><strong>Changes:</strong> Some changes may require restarting the application to take effect</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

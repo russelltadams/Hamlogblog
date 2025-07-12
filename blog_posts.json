@@ -6,7 +6,14 @@
       "content": "Welcome to my amateur radio log blog! This is where I'll be sharing my contacts, experiences, and thoughts about amateur radio.\n\nThis blog serves as both a public showcase of my station activities and a personal log of my amateur radio journey. You'll find information about recent contacts, technical discussions, and insights from my time on the air.\n\nThe site features a complete contact management system with ADIF import capabilities, allowing me to maintain a comprehensive log while sharing interesting contacts and experiences with the amateur radio community.\n\nStay tuned for updates about my station setup, interesting DX contacts, contest activities, and technical projects. 73!",
       "excerpt": "Welcome to my amateur radio log blog! A place to share contacts, experiences, and technical discussions.",
       "date": "2025-07-12"
+    },
+    {
+      "id": 2,
+      "title": "The new logblog is starting to shape up",
+      "content": "The new logblog is starting to shape up and is looking good! Does any one care about blogs anymore?\r\n\r\n<a href=\"https://hamradioprep.com/wp-content/uploads/2020/01/History-of-Ham-Radio.png\">test</a>",
+      "excerpt": "The new logblog is starting to shape up and is looking good!",
+      "date": "2025-07-12"
     }
   ],
-  "next_id": 2
+  "next_id": 3
 }

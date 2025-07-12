@@ -3,6 +3,7 @@ import logging
 from flask import Flask, session
 from werkzeug.middleware.proxy_fix import ProxyFix
 from functools import wraps
+from config_manager import load_config, get_config_value
 
 # Configure logging for debugging
 logging.basicConfig(level=logging.DEBUG)
@@ -16,9 +17,12 @@ app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 app.config['UPLOAD_FOLDER'] = 'uploads'
 
-# Admin credentials
-ADMIN_USERNAME = "KM6KFX"
-ADMIN_PASSWORD = "happyham"
+# Load configuration
+app.config['HAMLOG_CONFIG'] = load_config()
+
+# Admin credentials from config
+ADMIN_USERNAME = get_config_value('station.call_sign', 'N0CALL')
+ADMIN_PASSWORD = get_config_value('site.admin_password', 'changeme')
 
 # Create upload directory if it doesn't exist
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
@@ -32,6 +36,15 @@ def admin_required(f):
             return redirect(url_for('admin_login'))
         return f(*args, **kwargs)
     return decorated_function
+
+# Template context processors
+@app.context_processor
+def inject_config():
+    """Make config values available in all templates"""
+    return {
+        'config': app.config['HAMLOG_CONFIG'],
+        'get_config': get_config_value
+    }
 
 # Import routes after app initialization
 import routes  # noqa: F401
