@@ -1,10 +1,10 @@
 {
   "station": {
-    "call_sign": "KM6KFX",
-    "operator_name": "Amateur Radio Operator",
+    "call_sign": "KM6KFQ",
+    "operator_name": "Russell A.",
     "qth": "California, USA",
     "grid_square": "CM87",
-    "email": "km6kfx@example.com"
+    "email": "km6kfx@km6kfx.us"
   },
   "site": {
     "title": "KM6KFX Hamlog",
@@ -14,9 +14,9 @@
   },
   "qsl": {
     "default_message": "Thanks for the QSO! 73s",
-    "equipment": "IC-7300, Yaesu FT-991A",
+    "equipment": "Xiegu G90",
     "antenna": "Various wire antennas",
-    "power": "100W"
+    "power": "20W"
   },
   "display": {
     "timezone": "UTC",

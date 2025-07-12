@@ -7,6 +7,7 @@ A Flask-based web application designed for amateur radio operators to manage the
 - **ADIF File Import**: Parse and import Amateur Data Interchange Format (ADIF) log files
 - **Contact Management**: View, search, and manage your station contacts
 - **QSL Card Generation**: Generate printable QSL cards for contacts
+- **Configuration System**: Customize station info, site settings, and QSL preferences
 - **Blog System**: Share your amateur radio experiences and activities
 - **Statistics Dashboard**: Track your contacts by band, mode, and country
 - **Search & Filter**: Advanced search capabilities across your contact log
@@ -102,12 +103,18 @@ A Flask-based web application designed for amateur radio operators to manage the
 
 ### Initial Setup
 
-1. **Access Admin Panel:**
-   - Navigate to `/admin_login`
-   - Default credentials: `KM6KFX` / `happyham`
-   - **Important**: Change these credentials in `app.py` before deployment
+1. **Configure Your Station:**
+   - Access Admin Panel → Site Configuration
+   - Set your call sign, QTH, grid square, and operator name
+   - Customize site title, admin password, and QSL preferences
+   - Save configuration (changes take effect after restart)
 
-2. **Import Your Log:**
+2. **Access Admin Panel:**
+   - Navigate to `/admin_login`
+   - Login with your call sign and configured admin password
+   - Default: `KM6KFX` / `happyham` (change via configuration)
+
+3. **Import Your Log:**
    - Go to Admin Panel → Upload ADIF File
    - Select your `.adi` or `.adif` file
    - The system will parse and import all contacts
@@ -129,10 +136,29 @@ A Flask-based web application designed for amateur radio operators to manage the
    - Use Blog Management interface to modify existing posts
    - Posts appear immediately on the public blog
 
+### Configuration Management
+
+The application uses a `config.json` file to store all station and site settings:
+
+**Station Information:**
+- Call sign (used for site title and admin login)
+- Operator name, QTH, grid square, email
+- Equipment details for QSL cards
+
+**Site Settings:**
+- Site title, subtitle, description
+- Admin password and display preferences
+- QSL card default message and equipment info
+
+**Configuration Interface:**
+- Access via Admin Panel → Site Configuration
+- Changes take effect after application restart
+- All templates and QSL cards use configuration values
+
 ### Data Management
 
 - **Backup**: Regularly export your data using the JSON export feature
-- **File Storage**: All data is stored in JSON files (`station_log.json`, `blog_posts.json`)
+- **File Storage**: All data is stored in JSON files (`station_log.json`, `blog_posts.json`, `config.json`)
 - **Uploads**: ADIF files are temporarily stored in the `uploads/` directory
 
 ## Developer Documentation
@@ -147,9 +173,11 @@ hamlogblog/
 ├── models.py           # Data models and file operations
 ├── adif_parser.py      # ADIF file parsing logic
 ├── qsl_generator.py    # QSL card image generation
+├── config_manager.py   # Configuration management utilities
 ├── templates/          # Jinja2 HTML templates
 ├── static/            # CSS, JavaScript, and static assets
 ├── uploads/           # Temporary file storage
+├── config.json        # Station and site configuration
 ├── station_log.json   # Main contact database
 └── blog_posts.json    # Blog content storage
 ```

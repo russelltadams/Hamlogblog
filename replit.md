@@ -11,9 +11,14 @@ Preferred communication style: Simple, everyday language.
 ## Recent Changes
 
 ### July 12, 2025
+- **Configuration System**: Implemented complete configuration management with config.json
+- **Station Customization**: Added configurable station info (call sign, QTH, grid square, operator name)
+- **Site Personalization**: Site title, footer, and admin login now use configurable call sign
+- **QSL Customization**: Added configurable QSL card settings (message, equipment, antenna, power)
+- **Admin Interface**: Created user-friendly configuration management page accessible via Admin Panel
+- **Template Integration**: Updated all templates to use configuration values for consistent branding
 - Fixed search function bug where contact details showed wrong contact information
 - Created comprehensive README.md with deployment, admin, and developer documentation
-- Search results now correctly track original contact indices from station log
 
 ## System Architecture
 
