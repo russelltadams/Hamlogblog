@@ -110,51 +110,53 @@ def search():
     date_to = request.args.get('date_to', '').strip()
     page = request.args.get('page', 1, type=int)
     
-    contacts = station_log['contacts']
+    all_contacts = station_log['contacts']
+    
+    # Create a list of (contact, original_index) tuples to track original indices
+    indexed_contacts = [(contact, idx) for idx, contact in enumerate(all_contacts)]
     
     # Apply filters
     if query:
         query_lower = query.lower()
-        contacts = [c for c in contacts if 
-                   query_lower in c.get('call', '').lower() or
-                   query_lower in c.get('country', '').lower() or
-                   query_lower in c.get('state', '').lower()]
+        indexed_contacts = [(c, idx) for c, idx in indexed_contacts if 
+                           query_lower in c.get('call', '').lower() or
+                           query_lower in c.get('country', '').lower() or
+                           query_lower in c.get('state', '').lower()]
     
     if call_filter:
         call_filter_lower = call_filter.lower()
-        contacts = [c for c in contacts if call_filter_lower in c.get('call', '').lower()]
+        indexed_contacts = [(c, idx) for c, idx in indexed_contacts if call_filter_lower in c.get('call', '').lower()]
     
     if band_filter:
-        contacts = [c for c in contacts if c.get('band', '').upper() == band_filter.upper()]
+        indexed_contacts = [(c, idx) for c, idx in indexed_contacts if c.get('band', '').upper() == band_filter.upper()]
     
     if mode_filter:
-        contacts = [c for c in contacts if c.get('mode', '').upper() == mode_filter.upper()]
+        indexed_contacts = [(c, idx) for c, idx in indexed_contacts if c.get('mode', '').upper() == mode_filter.upper()]
     
     if date_from:
-        contacts = [c for c in contacts if c.get('qso_date', '') >= date_from]
+        indexed_contacts = [(c, idx) for c, idx in indexed_contacts if c.get('qso_date', '') >= date_from]
     
     if date_to:
-        contacts = [c for c in contacts if c.get('qso_date', '') <= date_to]
+        indexed_contacts = [(c, idx) for c, idx in indexed_contacts if c.get('qso_date', '') <= date_to]
     
     # Pagination
     per_page = 50
-    total_results = len(contacts)
+    total_results = len(indexed_contacts)
     start_idx = (page - 1) * per_page
     end_idx = start_idx + per_page
     
-    paginated_contacts = contacts[start_idx:end_idx]
+    paginated_indexed_contacts = indexed_contacts[start_idx:end_idx]
     
     total_pages = (total_results + per_page - 1) // per_page
     has_prev = page > 1
     has_next = page < total_pages
     
     # Get unique bands and modes for dropdowns
-    all_contacts = station_log['contacts']
     unique_bands = sorted(set(c.get('band', '').upper() for c in all_contacts if c.get('band')))
     unique_modes = sorted(set(c.get('mode', '').upper() for c in all_contacts if c.get('mode')))
     
     return render_template('search.html',
-                         contacts=paginated_contacts,
+                         contacts=paginated_indexed_contacts,
                          query=query,
                          call_filter=call_filter,
                          band_filter=band_filter,
