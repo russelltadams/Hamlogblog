@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}Blog - Hamlogblog{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4><i class="fas fa-blog"></i> Amateur Radio Blog</h4>
+                {% if session.admin_logged_in %}
+                    <a href="{{ url_for('blog_new') }}" class="btn btn-success">
+                        <i class="fas fa-plus"></i> New Post
+                    </a>
+                {% endif %}
+            </div>
+            <div class="card-body">
+                {% if posts %}
+                    {% for post in posts %}
+                    <article class="blog-post mb-4 {% if not loop.last %}border-bottom pb-4{% endif %}">
+                        <header class="mb-3">
+                            <h3>
+                                <a href="{{ url_for('blog_post', post_id=post.id) }}" class="text-decoration-none">
+                                    {{ post.title }}
+                                </a>
+                            </h3>
+                            <div class="text-muted">
+                                <i class="fas fa-calendar"></i> {{ post.date }}
+                                {% if session.admin_logged_in %}
+                                    <span class="ms-3">
+                                        <a href="{{ url_for('blog_edit', post_id=post.id) }}" class="text-decoration-none">
+                                            <i class="fas fa-edit"></i> Edit
+                                        </a>
+                                    </span>
+                                {% endif %}
+                            </div>
+                        </header>
+                        
+                        <div class="post-excerpt">
+                            {% if post.excerpt %}
+                                <p>{{ post.excerpt }}</p>
+                            {% else %}
+                                <p>{{ post.content[:200] }}{% if post.content|length > 200 %}...{% endif %}</p>
+                            {% endif %}
+                        </div>
+                        
+                        <footer>
+                            <a href="{{ url_for('blog_post', post_id=post.id) }}" class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-arrow-right"></i> Read More
+                            </a>
+                        </footer>
+                    </article>
+                    {% endfor %}
+                {% else %}
+                    <div class="text-center py-5">
+                        <i class="fas fa-blog fa-4x text-muted mb-3"></i>
+                        <h3 class="text-muted">No Blog Posts Yet</h3>
+                        <p class="text-muted">Check back later for amateur radio articles and updates!</p>
+                        {% if session.admin_logged_in %}
+                            <a href="{{ url_for('blog_new') }}" class="btn btn-primary">
+                                <i class="fas fa-plus"></i> Create First Post
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

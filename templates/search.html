@@ -1,0 +1,240 @@
+{% extends "base.html" %}
+
+{% block title %}Search Contacts - Hamlogblog{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h4><i class="fas fa-search"></i> Search Contacts</h4>
+            </div>
+            <div class="card-body">
+                <!-- Search Form -->
+                <form method="GET" class="mb-4">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="mb-3">
+                                <label for="q" class="form-label">General Search</label>
+                                <input type="text" class="form-control" id="q" name="q" value="{{ query }}" 
+                                       placeholder="Call sign, country, state..." data-shortcut="search">
+                                <div class="form-text">Search across call signs, countries, and states</div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-2">
+                            <div class="mb-3">
+                                <label for="call" class="form-label">Call Sign</label>
+                                <input type="text" class="form-control" id="call" name="call" value="{{ call_filter }}" 
+                                       placeholder="e.g., W1AW">
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-2">
+                            <div class="mb-3">
+                                <label for="band" class="form-label">Band</label>
+                                <select class="form-select" id="band" name="band">
+                                    <option value="">All Bands</option>
+                                    {% for band in unique_bands %}
+                                        <option value="{{ band }}" {% if band == band_filter %}selected{% endif %}>{{ band }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-2">
+                            <div class="mb-3">
+                                <label for="mode" class="form-label">Mode</label>
+                                <select class="form-select" id="mode" name="mode">
+                                    <option value="">All Modes</option>
+                                    {% for mode in unique_modes %}
+                                        <option value="{{ mode }}" {% if mode == mode_filter %}selected{% endif %}>{{ mode }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-2">
+                            <div class="mb-3">
+                                <label class="form-label">&nbsp;</label>
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-search"></i> Search
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <div class="mb-3">
+                                <label for="date_from" class="form-label">Date From</label>
+                                <input type="date" class="form-control" id="date_from" name="date_from" value="{{ date_from }}">
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-3">
+                            <div class="mb-3">
+                                <label for="date_to" class="form-label">Date To</label>
+                                <input type="date" class="form-control" id="date_to" name="date_to" value="{{ date_to }}">
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label class="form-label">&nbsp;</label>
+                                <div class="d-flex gap-2">
+                                    <a href="{{ url_for('search') }}" class="btn btn-outline-secondary">
+                                        <i class="fas fa-times"></i> Clear All
+                                    </a>
+                                    <div class="text-muted small align-self-end">
+                                        Press <kbd>Ctrl+K</kbd> to focus search
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Search Results -->
+                {% if request.args %}
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5>Search Results ({{ total_results }} found)</h5>
+                        {% if total_results > 0 %}
+                            <small class="text-muted">
+                                Showing {{ (page-1)*50 + 1 }} - {{ ((page-1)*50 + contacts|length) }} of {{ total_results }}
+                            </small>
+                        {% endif %}
+                    </div>
+
+                    {% if contacts %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Call Sign</th>
+                                        <th>Date</th>
+                                        <th>Time</th>
+                                        <th>Band</th>
+                                        <th>Mode</th>
+                                        <th>Country</th>
+                                        <th>RST</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for contact in contacts %}
+                                    <tr>
+                                        <td>
+                                            <strong>{{ contact.call }}</strong>
+                                            <a href="https://www.qrz.com/db/{{ contact.call }}" target="_blank" class="ms-2">
+                                                <i class="fas fa-external-link-alt text-muted"></i>
+                                            </a>
+                                        </td>
+                                        <td>{{ contact.qso_date }}</td>
+                                        <td>{{ contact.time_on[:5] if contact.time_on else '' }}</td>
+                                        <td><span class="badge bg-secondary">{{ contact.band }}</span></td>
+                                        <td><span class="badge bg-info">{{ contact.mode }}</span></td>
+                                        <td>{{ contact.country }}</td>
+                                        <td>
+                                            {% if contact.mode and contact.mode.upper() in ['FT8', 'FT4', 'JS8', 'PSK31', 'RTTY', 'DIGITAL', 'DATA'] %}
+                                                <span class="text-muted">N/A ({{ contact.mode }})</span>
+                                            {% else %}
+                                                {{ contact.rst_sent }}/{{ contact.rst_rcvd }}
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <div class="btn-group btn-group-sm">
+                                                <button class="btn btn-outline-secondary dropdown-toggle" type="button" 
+                                                        data-bs-toggle="dropdown">
+                                                    Actions
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <a class="dropdown-item" href="{{ url_for('contact_details', contact_index=loop.index0 + (page-1)*50) }}">
+                                                            <i class="fas fa-eye"></i> See Details
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item" href="{{ url_for('generate_qsl', contact_index=loop.index0 + (page-1)*50) }}">
+                                                            <i class="fas fa-id-card"></i> QSL Card
+                                                        </a>
+                                                    </li>
+                                                    <li><hr class="dropdown-divider"></li>
+                                                    <li>
+                                                        <a class="dropdown-item" href="https://www.qrz.com/db/{{ contact.call }}" target="_blank">
+                                                            <i class="fas fa-external-link-alt"></i> QRZ Lookup
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Pagination -->
+                        {% if total_pages > 1 %}
+                        <nav aria-label="Search pagination">
+                            <ul class="pagination justify-content-center">
+                                {% if has_prev %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ url_for('search', page=page-1, q=query, call=call_filter, band=band_filter, mode=mode_filter, date_from=date_from, date_to=date_to) }}">
+                                            <i class="fas fa-chevron-left"></i> Previous
+                                        </a>
+                                    </li>
+                                {% endif %}
+                                
+                                {% for p in range(1, total_pages + 1) %}
+                                    {% if p == page %}
+                                        <li class="page-item active">
+                                            <span class="page-link">{{ p }}</span>
+                                        </li>
+                                    {% elif p <= 3 or p >= total_pages - 2 or (p >= page - 2 and p <= page + 2) %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="{{ url_for('search', page=p, q=query, call=call_filter, band=band_filter, mode=mode_filter, date_from=date_from, date_to=date_to) }}">{{ p }}</a>
+                                        </li>
+                                    {% elif p == 4 and page > 6 %}
+                                        <li class="page-item disabled">
+                                            <span class="page-link">...</span>
+                                        </li>
+                                    {% elif p == total_pages - 3 and page < total_pages - 5 %}
+                                        <li class="page-item disabled">
+                                            <span class="page-link">...</span>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                                
+                                {% if has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ url_for('search', page=page+1, q=query, call=call_filter, band=band_filter, mode=mode_filter, date_from=date_from, date_to=date_to) }}">
+                                            Next <i class="fas fa-chevron-right"></i>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                        {% endif %}
+
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-search fa-4x text-muted mb-3"></i>
+                            <h3 class="text-muted">No Contacts Found</h3>
+                            <p class="text-muted">Try adjusting your search criteria.</p>
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <div class="text-center py-5">
+                        <i class="fas fa-search fa-4x text-muted mb-3"></i>
+                        <h3 class="text-muted">Search Your Contacts</h3>
+                        <p class="text-muted">Use the search form above to find specific contacts in your log.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

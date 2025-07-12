@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <!-- Station Statistics -->
+    <div class="col-lg-8">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4><i class="fas fa-chart-bar"></i> Station Statistics</h4>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-md-3">
+                        <div class="stat-box">
+                            <h2 class="text-primary">{{ stats.total_contacts }}</h2>
+                            <p class="text-muted">Total Contacts</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-box">
+                            <h2 class="text-success">{{ stats.total_bands }}</h2>
+                            <p class="text-muted">Bands Worked</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-box">
+                            <h2 class="text-info">{{ stats.total_modes }}</h2>
+                            <p class="text-muted">Modes Used</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-box">
+                            <h2 class="text-warning">{{ stats.total_countries }}</h2>
+                            <p class="text-muted">Countries Worked</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Contacts -->
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4><i class="fas fa-clock"></i> Recent Contacts</h4>
+                <a href="{{ url_for('view_log') }}" class="btn btn-outline-primary btn-sm">
+                    <i class="fas fa-list"></i> View All
+                </a>
+            </div>
+            <div class="card-body">
+                {% if recent_contacts %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Call Sign</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Band</th>
+                                    <th>Mode</th>
+                                    <th>Country</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for contact in recent_contacts %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ contact.call }}</strong>
+                                        <a href="https://www.qrz.com/db/{{ contact.call }}" target="_blank" class="ms-2">
+                                            <i class="fas fa-external-link-alt text-muted"></i>
+                                        </a>
+                                    </td>
+                                    <td>{{ contact.qso_date }}</td>
+                                    <td>{{ contact.time_on[:5] if contact.time_on else '' }}</td>
+                                    <td><span class="badge bg-secondary">{{ contact.band }}</span></td>
+                                    <td><span class="badge bg-info">{{ contact.mode }}</span></td>
+                                    <td>{{ contact.country }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-radio fa-3x text-muted mb-3"></i>
+                        <p class="text-muted">No contacts logged yet. Start making some QSOs!</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Latest Blog Posts -->
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4><i class="fas fa-blog"></i> Latest Posts</h4>
+                <a href="{{ url_for('blog') }}" class="btn btn-outline-primary btn-sm">
+                    <i class="fas fa-arrow-right"></i> All Posts
+                </a>
+            </div>
+            <div class="card-body">
+                {% if latest_posts %}
+                    {% for post in latest_posts %}
+                    <div class="blog-preview mb-3 {% if not loop.last %}border-bottom pb-3{% endif %}">
+                        <h6>
+                            <a href="{{ url_for('blog_post', post_id=post.id) }}" class="text-decoration-none">
+                                {{ post.title }}
+                            </a>
+                        </h6>
+                        <p class="text-muted small mb-1">
+                            <i class="fas fa-calendar"></i> {{ post.date }}
+                        </p>
+                        <p class="small text-muted">{{ post.excerpt[:100] }}{% if post.excerpt|length > 100 %}...{% endif %}</p>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-blog fa-3x text-muted mb-3"></i>
+                        <p class="text-muted">No blog posts yet.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5><i class="fas fa-link"></i> Quick Links</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="{{ url_for('search') }}" class="btn btn-outline-primary">
+                        <i class="fas fa-search"></i> Search Contacts
+                    </a>
+                    <a href="https://www.qrz.com" target="_blank" class="btn btn-outline-secondary">
+                        <i class="fas fa-external-link-alt"></i> QRZ.com
+                    </a>
+                    <a href="https://lotw.arrl.org" target="_blank" class="btn btn-outline-secondary">
+                        <i class="fas fa-certificate"></i> LOTW
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,313 @@
+{% extends "base.html" %}
+
+{% block title %}{{ contact.call }} Contact Details - Hamlogblog{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4><i class="fas fa-radio"></i> Contact Details: {{ contact.call }}</h4>
+                <div class="btn-group">
+                    <a href="{{ url_for('generate_qsl', contact_index=contact_index) }}" class="btn btn-primary">
+                        <i class="fas fa-id-card"></i> QSL Card
+                    </a>
+                    <a href="https://www.qrz.com/db/{{ contact.call }}" target="_blank" class="btn btn-outline-secondary">
+                        <i class="fas fa-external-link-alt"></i> QRZ
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <!-- Basic QSO Information -->
+                    <div class="col-md-6">
+                        <h5><i class="fas fa-info-circle"></i> QSO Information</h5>
+                        <table class="table table-sm">
+                            <tr>
+                                <td><strong>Call Sign:</strong></td>
+                                <td>{{ contact.call }}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Date:</strong></td>
+                                <td>{{ contact.qso_date }}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Time ON:</strong></td>
+                                <td>{{ contact.time_on }}</td>
+                            </tr>
+                            {% if contact.time_off %}
+                            <tr>
+                                <td><strong>Time OFF:</strong></td>
+                                <td>{{ contact.time_off }}</td>
+                            </tr>
+                            {% endif %}
+                            <tr>
+                                <td><strong>Band:</strong></td>
+                                <td><span class="badge bg-secondary">{{ contact.band }}</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Mode:</strong></td>
+                                <td><span class="badge bg-info">{{ contact.mode }}</span></td>
+                            </tr>
+                            {% if contact.submode %}
+                            <tr>
+                                <td><strong>Submode:</strong></td>
+                                <td>{{ contact.submode }}</td>
+                            </tr>
+                            {% endif %}
+                            {% if contact.freq %}
+                            <tr>
+                                <td><strong>Frequency:</strong></td>
+                                <td>{{ contact.freq }} MHz</td>
+                            </tr>
+                            {% endif %}
+                        </table>
+                    </div>
+
+                    <!-- Signal Reports and Location -->
+                    <div class="col-md-6">
+                        <h5><i class="fas fa-signal"></i> Signal & Location</h5>
+                        <table class="table table-sm">
+                            <tr>
+                                <td><strong>RST Sent:</strong></td>
+                                <td>
+                                    {% if contact.mode and contact.mode.upper() in ['FT8', 'FT4', 'JS8', 'PSK31', 'RTTY', 'DIGITAL', 'DATA'] %}
+                                        <span class="text-muted">N/A ({{ contact.mode }})</span>
+                                    {% else %}
+                                        {{ contact.rst_sent if contact.rst_sent else 'N/A' }}
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>RST Received:</strong></td>
+                                <td>
+                                    {% if contact.mode and contact.mode.upper() in ['FT8', 'FT4', 'JS8', 'PSK31', 'RTTY', 'DIGITAL', 'DATA'] %}
+                                        <span class="text-muted">N/A ({{ contact.mode }})</span>
+                                    {% else %}
+                                        {{ contact.rst_rcvd if contact.rst_rcvd else 'N/A' }}
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% if contact.gridsquare %}
+                            <tr>
+                                <td><strong>Grid Square:</strong></td>
+                                <td>{{ contact.gridsquare }}</td>
+                            </tr>
+                            {% endif %}
+                            {% if contact.country %}
+                            <tr>
+                                <td><strong>Country:</strong></td>
+                                <td>{{ contact.country }}</td>
+                            </tr>
+                            {% endif %}
+                            {% if contact.state %}
+                            <tr>
+                                <td><strong>State:</strong></td>
+                                <td>{{ contact.state }}</td>
+                            </tr>
+                            {% endif %}
+                            {% if contact.county %}
+                            <tr>
+                                <td><strong>County:</strong></td>
+                                <td>{{ contact.county }}</td>
+                            </tr>
+                            {% endif %}
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Station Information -->
+                {% if contact.station_callsign or contact.operator %}
+                <hr>
+                <div class="row">
+                    <div class="col-12">
+                        <h5><i class="fas fa-home"></i> Station Information</h5>
+                        <table class="table table-sm">
+                            {% if contact.station_callsign %}
+                            <tr>
+                                <td><strong>Station Call:</strong></td>
+                                <td>{{ contact.station_callsign }}</td>
+                            </tr>
+                            {% endif %}
+                            {% if contact.operator %}
+                            <tr>
+                                <td><strong>Operator:</strong></td>
+                                <td>{{ contact.operator }}</td>
+                            </tr>
+                            {% endif %}
+                        </table>
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- QSL Information -->
+                {% if contact.qsl_sent or contact.qsl_rcvd or contact.qsl_sent_date or contact.qsl_rcvd_date %}
+                <hr>
+                <div class="row">
+                    <div class="col-12">
+                        <h5><i class="fas fa-envelope"></i> QSL Information</h5>
+                        <table class="table table-sm">
+                            {% if contact.qsl_sent %}
+                            <tr>
+                                <td><strong>QSL Sent:</strong></td>
+                                <td>
+                                    {% if contact.qsl_sent.upper() in ['Y', 'YES'] %}
+                                        <span class="badge bg-success">Yes</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">{{ contact.qsl_sent }}</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endif %}
+                            {% if contact.qsl_rcvd %}
+                            <tr>
+                                <td><strong>QSL Received:</strong></td>
+                                <td>
+                                    {% if contact.qsl_rcvd.upper() in ['Y', 'YES'] %}
+                                        <span class="badge bg-success">Yes</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">{{ contact.qsl_rcvd }}</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endif %}
+                            {% if contact.qsl_sent_date %}
+                            <tr>
+                                <td><strong>QSL Sent Date:</strong></td>
+                                <td>{{ contact.qsl_sent_date }}</td>
+                            </tr>
+                            {% endif %}
+                            {% if contact.qsl_rcvd_date %}
+                            <tr>
+                                <td><strong>QSL Received Date:</strong></td>
+                                <td>{{ contact.qsl_rcvd_date }}</td>
+                            </tr>
+                            {% endif %}
+                        </table>
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Contest Information -->
+                {% if contact.contest_id or contact.srx or contact.stx %}
+                <hr>
+                <div class="row">
+                    <div class="col-12">
+                        <h5><i class="fas fa-trophy"></i> Contest Information</h5>
+                        <table class="table table-sm">
+                            {% if contact.contest_id %}
+                            <tr>
+                                <td><strong>Contest:</strong></td>
+                                <td>{{ contact.contest_id }}</td>
+                            </tr>
+                            {% endif %}
+                            {% if contact.srx %}
+                            <tr>
+                                <td><strong>Serial RX:</strong></td>
+                                <td>{{ contact.srx }}</td>
+                            </tr>
+                            {% endif %}
+                            {% if contact.stx %}
+                            <tr>
+                                <td><strong>Serial TX:</strong></td>
+                                <td>{{ contact.stx }}</td>
+                            </tr>
+                            {% endif %}
+                        </table>
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Comments and Notes -->
+                {% if contact.comment or contact.comments or contact.notes or contact.remarks %}
+                <hr>
+                <div class="row">
+                    <div class="col-12">
+                        <h5><i class="fas fa-comment"></i> Comments & Notes</h5>
+                        {% if contact.comment %}
+                            <p><strong>Comment:</strong> {{ contact.comment }}</p>
+                        {% endif %}
+                        {% if contact.comments %}
+                            <p><strong>Comments:</strong> {{ contact.comments }}</p>
+                        {% endif %}
+                        {% if contact.notes %}
+                            <p><strong>Notes:</strong> {{ contact.notes }}</p>
+                        {% endif %}
+                        {% if contact.remarks %}
+                            <p><strong>Remarks:</strong> {{ contact.remarks }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Additional Fields -->
+                {% if contact.additional_fields %}
+                <hr>
+                <div class="row">
+                    <div class="col-12">
+                        <h5><i class="fas fa-plus-circle"></i> Additional Fields</h5>
+                        <table class="table table-sm">
+                            {% for field, value in contact.additional_fields.items() %}
+                            <tr>
+                                <td><strong>{{ field.upper() }}:</strong></td>
+                                <td>{{ value }}</td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            <div class="card-footer">
+                <a href="{{ url_for('view_log') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Log
+                </a>
+                <a href="{{ url_for('generate_qsl', contact_index=contact_index) }}" class="btn btn-primary">
+                    <i class="fas fa-id-card"></i> Generate QSL Card
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-link"></i> Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="{{ url_for('generate_qsl', contact_index=contact_index) }}" class="btn btn-primary">
+                        <i class="fas fa-id-card"></i> Generate QSL Card
+                    </a>
+                    <a href="https://www.qrz.com/db/{{ contact.call }}" target="_blank" class="btn btn-outline-secondary">
+                        <i class="fas fa-external-link-alt"></i> QRZ Lookup
+                    </a>
+                    <a href="{{ url_for('search', call=contact.call) }}" class="btn btn-outline-info">
+                        <i class="fas fa-search"></i> Find Similar Contacts
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5><i class="fas fa-info"></i> Contact Summary</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-user"></i> <strong>{{ contact.call }}</strong></li>
+                    <li><i class="fas fa-calendar"></i> {{ contact.qso_date }}</li>
+                    <li><i class="fas fa-clock"></i> {{ contact.time_on }}</li>
+                    <li><i class="fas fa-signal"></i> {{ contact.band }} / {{ contact.mode }}</li>
+                    {% if contact.country %}
+                        <li><i class="fas fa-globe"></i> {{ contact.country }}</li>
+                    {% endif %}
+                    {% if contact.gridsquare %}
+                        <li><i class="fas fa-map"></i> {{ contact.gridsquare }}</li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

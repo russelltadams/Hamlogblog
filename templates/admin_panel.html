@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Panel - Hamlogblog{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h4><i class="fas fa-tachometer-alt"></i> Admin Panel</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <!-- Upload Section -->
+                    <div class="col-lg-6">
+                        <h5><i class="fas fa-upload"></i> Upload ADIF File</h5>
+                        <form action="{{ url_for('upload_file') }}" method="post" enctype="multipart/form-data" class="mb-4">
+                            <div class="mb-3">
+                                <label for="file" class="form-label">Select ADIF File</label>
+                                <input type="file" class="form-control" id="file" name="file" accept=".adi,.adif,.txt" required>
+                                <div class="form-text">Supported formats: .adi, .adif, .txt (Max: 16MB)</div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-upload"></i> Upload and Convert
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Statistics -->
+                    <div class="col-lg-6">
+                        <h5><i class="fas fa-chart-bar"></i> Log Statistics</h5>
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <tr>
+                                    <td><strong>Total Contacts:</strong></td>
+                                    <td>{{ stats.total_contacts }}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Last Updated:</strong></td>
+                                    <td>{{ stats.last_updated }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- Management Actions -->
+                <div class="row">
+                    <div class="col-md-4">
+                        <h5><i class="fas fa-blog"></i> Blog Management</h5>
+                        <div class="d-grid gap-2">
+                            <a href="{{ url_for('blog_management') }}" class="btn btn-outline-primary">
+                                <i class="fas fa-edit"></i> Manage Blog Posts
+                            </a>
+                            <a href="{{ url_for('blog_new') }}" class="btn btn-outline-success">
+                                <i class="fas fa-plus"></i> New Blog Post
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <h5><i class="fas fa-download"></i> Export Data</h5>
+                        <div class="d-grid gap-2">
+                            <a href="{{ url_for('export_json') }}" class="btn btn-outline-secondary">
+                                <i class="fas fa-file-code"></i> Export JSON
+                            </a>
+                            <a href="{{ url_for('export_adif') }}" class="btn btn-outline-secondary">
+                                <i class="fas fa-file-alt"></i> Export ADIF
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <h5><i class="fas fa-tools"></i> Management</h5>
+                        <div class="d-grid gap-2">
+                            <a href="{{ url_for('view_log') }}" class="btn btn-outline-info">
+                                <i class="fas fa-list"></i> View All Contacts
+                            </a>
+                            <a href="{{ url_for('search') }}" class="btn btn-outline-info">
+                                <i class="fas fa-search"></i> Search Contacts
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
