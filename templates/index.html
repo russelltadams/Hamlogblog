@@ -64,7 +64,9 @@
                                 {% for contact in recent_contacts %}
                                 <tr>
                                     <td>
-                                        <strong>{{ contact.call }}</strong>
+                                        <a href="{{ url_for('search', call=contact.call) }}" class="text-decoration-none">
+                                            <strong>{{ contact.call }}</strong>
+                                        </a>
                                         <a href="https://www.qrz.com/db/{{ contact.call }}" target="_blank" class="ms-2">
                                             <i class="fas fa-external-link-alt text-muted"></i>
                                         </a>
