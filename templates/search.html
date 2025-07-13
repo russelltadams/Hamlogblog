@@ -104,6 +104,12 @@
                             <h5>
                                 {% if call_filter and not query and not band_filter and not mode_filter and not date_from and not date_to %}
                                     All QSOs with {{ call_filter.upper() }} ({{ total_results }} found)
+                                {% elif query and not call_filter and not band_filter and not mode_filter and not date_from and not date_to %}
+                                    {% if query|length == 4 and query[0:2].isalpha() and query[2:4].isdigit() %}
+                                        All QSOs from grid {{ query.upper() }} ({{ total_results }} found)
+                                    {% else %}
+                                        All QSOs from {{ query }} ({{ total_results }} found)
+                                    {% endif %}
                                 {% else %}
                                     Search Results ({{ total_results }} found)
                                 {% endif %}
@@ -111,6 +117,10 @@
                             {% if call_filter and not query and not band_filter and not mode_filter and not date_from and not date_to %}
                                 <small class="text-muted">
                                     <i class="fas fa-info-circle"></i> Click any call sign to view all QSOs with that station
+                                </small>
+                            {% elif query and not call_filter and not band_filter and not mode_filter and not date_from and not date_to %}
+                                <small class="text-muted">
+                                    <i class="fas fa-info-circle"></i> Click any country or grid square to search for similar contacts
                                 </small>
                             {% endif %}
                         </div>
@@ -132,6 +142,7 @@
                                         <th>Band</th>
                                         <th>Mode</th>
                                         <th>Country</th>
+                                        <th>Grid</th>
                                         <th>RST</th>
                                         <th>Actions</th>
                                     </tr>
@@ -151,7 +162,20 @@
                                         <td>{{ contact.time_on[:5] if contact.time_on else '' }}</td>
                                         <td><span class="badge bg-secondary">{{ contact.band }}</span></td>
                                         <td><span class="badge bg-info">{{ contact.mode }}</span></td>
-                                        <td>{{ contact.country }}</td>
+                                        <td>
+                                            {% if contact.country %}
+                                                <a href="{{ url_for('search', q=contact.country) }}" class="text-decoration-none">
+                                                    {{ contact.country }}
+                                                </a>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if contact.gridsquare %}
+                                                <a href="{{ url_for('search', q=contact.gridsquare) }}" class="text-decoration-none">
+                                                    <code>{{ contact.gridsquare }}</code>
+                                                </a>
+                                            {% endif %}
+                                        </td>
                                         <td>
                                             {% if contact.mode and contact.mode.upper() in ['FT8', 'FT4', 'JS8', 'PSK31', 'RTTY', 'DIGITAL', 'DATA', 'JT9', 'JT65', 'MFSK', 'OLIVIA', 'CONTESTIA', 'HELL', 'DOMINOEX', 'THOR', 'THROB', 'MT63', 'PACKET', 'WINMOR', 'ARDOP', 'VARA'] %}
                                                 <span class="text-muted">N/A ({{ contact.mode }})</span>

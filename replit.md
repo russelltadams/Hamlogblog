@@ -25,6 +25,9 @@ Preferred communication style: Simple, everyday language.
 - **Configuration Integration**: Contact pagination and recent contacts now use configurable limits
 - **RST Display**: Enhanced RST column to properly handle digital modes and missing data
 - **Digital Mode Detection**: Expanded digital mode list for better RST handling across all templates
+- **Clickable Navigation**: Made call signs, countries, and grid squares clickable for instant searches
+- **Grid Square Column**: Added grid square column to contact tables with clickable search functionality
+- **Enhanced Contact Details**: Added quick search buttons for related contacts by call, country, and grid
 
 ## System Architecture
 
