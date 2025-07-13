@@ -50,8 +50,12 @@
                                     <td><span class="badge bg-info">{{ contact.mode }}</span></td>
                                     <td>{{ contact.country }}</td>
                                     <td>
-                                        {% if contact.mode and contact.mode.upper() in ['FT8', 'FT4', 'JS8', 'PSK31', 'RTTY', 'DIGITAL', 'DATA'] %}
+                                        {% if contact.mode and contact.mode.upper() in ['FT8', 'FT4', 'JS8', 'PSK31', 'RTTY', 'DIGITAL', 'DATA', 'JT9', 'JT65', 'MFSK', 'OLIVIA', 'CONTESTIA', 'HELL', 'DOMINOEX', 'THOR', 'THROB', 'MT63', 'PACKET', 'WINMOR', 'ARDOP', 'VARA'] %}
                                             <span class="text-muted">N/A ({{ contact.mode }})</span>
+                                        {% elif not contact.rst_sent and not contact.rst_rcvd %}
+                                            <span class="text-muted">N/A</span>
+                                        {% elif not contact.rst_sent or not contact.rst_rcvd %}
+                                            <span class="text-muted">{{ contact.rst_sent or 'N/A' }}/{{ contact.rst_rcvd or 'N/A' }}</span>
                                         {% else %}
                                             {{ contact.rst_sent }}/{{ contact.rst_rcvd }}
                                         {% endif %}

@@ -20,6 +20,12 @@ Preferred communication style: Simple, everyday language.
 - Fixed search function bug where contact details showed wrong contact information
 - Created comprehensive README.md with deployment, admin, and developer documentation
 
+### July 13, 2025
+- **Contact Sorting**: Fixed all contact displays to sort by newest first (homepage, contact list, search results)
+- **Configuration Integration**: Contact pagination and recent contacts now use configurable limits
+- **RST Display**: Enhanced RST column to properly handle digital modes and missing data
+- **Digital Mode Detection**: Expanded digital mode list for better RST handling across all templates
+
 ## System Architecture
 
 ### Backend Architecture

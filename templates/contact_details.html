@@ -71,7 +71,7 @@
                             <tr>
                                 <td><strong>RST Sent:</strong></td>
                                 <td>
-                                    {% if contact.mode and contact.mode.upper() in ['FT8', 'FT4', 'JS8', 'PSK31', 'RTTY', 'DIGITAL', 'DATA'] %}
+                                    {% if contact.mode and contact.mode.upper() in ['FT8', 'FT4', 'JS8', 'PSK31', 'RTTY', 'DIGITAL', 'DATA', 'JT9', 'JT65', 'MFSK', 'OLIVIA', 'CONTESTIA', 'HELL', 'DOMINOEX', 'THOR', 'THROB', 'MT63', 'PACKET', 'WINMOR', 'ARDOP', 'VARA'] %}
                                         <span class="text-muted">N/A ({{ contact.mode }})</span>
                                     {% else %}
                                         {{ contact.rst_sent if contact.rst_sent else 'N/A' }}
@@ -81,7 +81,7 @@
                             <tr>
                                 <td><strong>RST Received:</strong></td>
                                 <td>
-                                    {% if contact.mode and contact.mode.upper() in ['FT8', 'FT4', 'JS8', 'PSK31', 'RTTY', 'DIGITAL', 'DATA'] %}
+                                    {% if contact.mode and contact.mode.upper() in ['FT8', 'FT4', 'JS8', 'PSK31', 'RTTY', 'DIGITAL', 'DATA', 'JT9', 'JT65', 'MFSK', 'OLIVIA', 'CONTESTIA', 'HELL', 'DOMINOEX', 'THOR', 'THROB', 'MT63', 'PACKET', 'WINMOR', 'ARDOP', 'VARA'] %}
                                         <span class="text-muted">N/A ({{ contact.mode }})</span>
                                     {% else %}
                                         {{ contact.rst_rcvd if contact.rst_rcvd else 'N/A' }}
