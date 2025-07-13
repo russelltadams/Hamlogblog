@@ -85,7 +85,7 @@
                                     </td>
                                     <td>
                                         {% if contact.gridsquare %}
-                                            <a href="{{ url_for('search', q=contact.gridsquare) }}" class="text-decoration-none">
+                                            <a href="{{ url_for('search', grid=contact.gridsquare) }}" class="text-decoration-none">
                                                 <code>{{ contact.gridsquare }}</code>
                                             </a>
                                         {% endif %}

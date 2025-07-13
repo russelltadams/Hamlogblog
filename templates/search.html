@@ -18,7 +18,7 @@
                                 <label for="q" class="form-label">General Search</label>
                                 <input type="text" class="form-control" id="q" name="q" value="{{ query }}" 
                                        placeholder="Call sign, country, state..." data-shortcut="search">
-                                <div class="form-text">Search across call signs, countries, and states</div>
+                                <div class="form-text">Search across call signs, countries, states, and grid squares</div>
                             </div>
                         </div>
                         
@@ -27,6 +27,14 @@
                                 <label for="call" class="form-label">Call Sign</label>
                                 <input type="text" class="form-control" id="call" name="call" value="{{ call_filter }}" 
                                        placeholder="e.g., W1AW">
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-2">
+                            <div class="mb-3">
+                                <label for="grid" class="form-label">Grid Square</label>
+                                <input type="text" class="form-control" id="grid" name="grid" value="{{ grid_filter }}" 
+                                       placeholder="e.g., CN87" maxlength="6">
                             </div>
                         </div>
                         
@@ -102,9 +110,11 @@
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <div>
                             <h5>
-                                {% if call_filter and not query and not band_filter and not mode_filter and not date_from and not date_to %}
+                                {% if call_filter and not query and not grid_filter and not band_filter and not mode_filter and not date_from and not date_to %}
                                     All QSOs with {{ call_filter.upper() }} ({{ total_results }} found)
-                                {% elif query and not call_filter and not band_filter and not mode_filter and not date_from and not date_to %}
+                                {% elif grid_filter and not query and not call_filter and not band_filter and not mode_filter and not date_from and not date_to %}
+                                    All QSOs from grid {{ grid_filter.upper() }} ({{ total_results }} found)
+                                {% elif query and not call_filter and not grid_filter and not band_filter and not mode_filter and not date_from and not date_to %}
                                     {% if query|length == 4 and query[0:2].isalpha() and query[2:4].isdigit() %}
                                         All QSOs from grid {{ query.upper() }} ({{ total_results }} found)
                                     {% else %}
@@ -114,11 +124,15 @@
                                     Search Results ({{ total_results }} found)
                                 {% endif %}
                             </h5>
-                            {% if call_filter and not query and not band_filter and not mode_filter and not date_from and not date_to %}
+                            {% if call_filter and not query and not grid_filter and not band_filter and not mode_filter and not date_from and not date_to %}
                                 <small class="text-muted">
                                     <i class="fas fa-info-circle"></i> Click any call sign to view all QSOs with that station
                                 </small>
-                            {% elif query and not call_filter and not band_filter and not mode_filter and not date_from and not date_to %}
+                            {% elif grid_filter and not query and not call_filter and not band_filter and not mode_filter and not date_from and not date_to %}
+                                <small class="text-muted">
+                                    <i class="fas fa-info-circle"></i> Click any grid square to search for similar contacts
+                                </small>
+                            {% elif query and not call_filter and not grid_filter and not band_filter and not mode_filter and not date_from and not date_to %}
                                 <small class="text-muted">
                                     <i class="fas fa-info-circle"></i> Click any country or grid square to search for similar contacts
                                 </small>
@@ -171,7 +185,7 @@
                                         </td>
                                         <td>
                                             {% if contact.gridsquare %}
-                                                <a href="{{ url_for('search', q=contact.gridsquare) }}" class="text-decoration-none">
+                                                <a href="{{ url_for('search', grid=contact.gridsquare) }}" class="text-decoration-none">
                                                     <code>{{ contact.gridsquare }}</code>
                                                 </a>
                                             {% endif %}

@@ -294,7 +294,7 @@
                         </a>
                     {% endif %}
                     {% if contact.gridsquare %}
-                        <a href="{{ url_for('search', q=contact.gridsquare) }}" class="btn btn-outline-warning">
+                        <a href="{{ url_for('search', grid=contact.gridsquare) }}" class="btn btn-outline-warning">
                             <i class="fas fa-map"></i> All QSOs from {{ contact.gridsquare }}
                         </a>
                     {% endif %}

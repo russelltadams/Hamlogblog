@@ -120,6 +120,7 @@ def search():
     # Get search parameters
     query = request.args.get('q', '').strip()
     call_filter = request.args.get('call', '').strip()
+    grid_filter = request.args.get('grid', '').strip()
     band_filter = request.args.get('band', '').strip()
     mode_filter = request.args.get('mode', '').strip()
     date_from = request.args.get('date_from', '').strip()
@@ -143,6 +144,10 @@ def search():
     if call_filter:
         call_filter_lower = call_filter.lower()
         indexed_contacts = [(c, idx) for c, idx in indexed_contacts if call_filter_lower in c.get('call', '').lower()]
+    
+    if grid_filter:
+        grid_filter_lower = grid_filter.lower()
+        indexed_contacts = [(c, idx) for c, idx in indexed_contacts if grid_filter_lower in c.get('gridsquare', '').lower()]
     
     if band_filter:
         indexed_contacts = [(c, idx) for c, idx in indexed_contacts if c.get('band', '').upper() == band_filter.upper()]
@@ -180,6 +185,7 @@ def search():
                          contacts=paginated_indexed_contacts,
                          query=query,
                          call_filter=call_filter,
+                         grid_filter=grid_filter,
                          band_filter=band_filter,
                          mode_filter=mode_filter,
                          date_from=date_from,
