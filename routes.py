@@ -15,10 +15,19 @@ def index():
     """Home page showing recent contacts and station statistics"""
     station_log = load_station_log()
     blog_posts = load_blog_posts()
+    config = load_config()
     
-    # Get recent contacts (last 10)
-    recent_contacts = station_log['contacts'][-10:] if station_log['contacts'] else []
-    recent_contacts.reverse()  # Show newest first
+    # Get recent contacts limit from config
+    recent_limit = config.get('display', {}).get('recent_contacts_limit', 10)
+    
+    # Sort all contacts by date/time and get the most recent ones
+    if station_log['contacts']:
+        sorted_contacts = sorted(station_log['contacts'], 
+                               key=lambda x: (x.get('qso_date', ''), x.get('time_on', '')), 
+                               reverse=True)
+        recent_contacts = sorted_contacts[:recent_limit]
+    else:
+        recent_contacts = []
     
     # Calculate statistics
     total_contacts = len(station_log['contacts'])
@@ -63,15 +72,21 @@ def blog_post(post_id):
 def view_log():
     """View all contacts with pagination"""
     station_log = load_station_log()
+    config = load_config()
     
     page = request.args.get('page', 1, type=int)
-    per_page = 50
+    per_page = config.get('display', {}).get('contacts_per_page', 50)
     
-    total_contacts = len(station_log['contacts'])
+    # Sort contacts by date/time in descending order (newest first)
+    sorted_contacts = sorted(station_log['contacts'], 
+                           key=lambda x: (x.get('qso_date', ''), x.get('time_on', '')), 
+                           reverse=True)
+    
+    total_contacts = len(sorted_contacts)
     start_idx = (page - 1) * per_page
     end_idx = start_idx + per_page
     
-    contacts = station_log['contacts'][start_idx:end_idx]
+    contacts = sorted_contacts[start_idx:end_idx]
     
     # Calculate pagination info
     total_pages = (total_contacts + per_page - 1) // per_page
@@ -140,8 +155,12 @@ def search():
     if date_to:
         indexed_contacts = [(c, idx) for c, idx in indexed_contacts if c.get('qso_date', '') <= date_to]
     
+    # Sort filtered contacts by date/time in descending order (newest first)
+    indexed_contacts.sort(key=lambda x: (x[0].get('qso_date', ''), x[0].get('time_on', '')), reverse=True)
+    
     # Pagination
-    per_page = 50
+    config = load_config()
+    per_page = config.get('display', {}).get('contacts_per_page', 50)
     total_results = len(indexed_contacts)
     start_idx = (page - 1) * per_page
     end_idx = start_idx + per_page
