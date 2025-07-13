@@ -137,7 +137,8 @@ def search():
         indexed_contacts = [(c, idx) for c, idx in indexed_contacts if 
                            query_lower in c.get('call', '').lower() or
                            query_lower in c.get('country', '').lower() or
-                           query_lower in c.get('state', '').lower()]
+                           query_lower in c.get('state', '').lower() or
+                           query_lower in c.get('gridsquare', '').lower()]
     
     if call_filter:
         call_filter_lower = call_filter.lower()
