@@ -35,7 +35,7 @@ def generate_qsl_card(contact, header):
     draw.rectangle([10, 10, width-10, height-10], outline=black, width=2)
     
     # Header
-    station_call = header.get('station_callsign', contact.get('station_callsign', get_config_value('station.call_sign', 'N0CALL')))
+    station_call = header.get('station_callsign', contact.get('station_callsign', str(get_config_value('station.call_sign', 'N0CALL'))))
     draw.text((30, 30), f"QSL CARD - {station_call}", fill=blue, font=title_font)
     
     # Contact info
@@ -128,7 +128,7 @@ def generate_qsl_card(contact, header):
     draw.text((30, height-40), footer_text, fill=gray, font=small_font)
     
     # Thank you message
-    thank_you = get_config_value('qsl.default_message', '73s and thanks for the contact!')
+    thank_you = str(get_config_value('qsl.default_message', '73s and thanks for the contact!'))
     text_width = draw.textlength(thank_you, font=content_font)
     draw.text((width - text_width - 30, height-40), thank_you, fill=blue, font=content_font)
     
