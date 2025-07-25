@@ -2,7 +2,7 @@
 # Configured for 2 VMs under Fly.io free tier
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 
-app = 'QSOWhat'
+app = 'qsoWhat'
 primary_region = 'sjc'
 
 [build]
