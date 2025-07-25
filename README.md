@@ -109,6 +109,17 @@ Fly.io offers an excellent platform for deploying Flask applications with minima
    fly deploy
    ```
 
+   **Note:** If you have an existing fly.io app from a previous deployment, you may need to:
+   ```bash
+   # Either destroy the old app and create a new one
+   fly apps destroy old-app-name
+   fly launch --no-deploy
+   
+   # Or update the app name in fly.toml to match your existing app
+   # Edit fly.toml and change the app name, then deploy
+   fly deploy
+   ```
+
 4. **Access your application:**
    ```bash
    fly open  # Opens your app in the browser
@@ -139,6 +150,30 @@ fly deploy  # Deploy changes
 fly logs    # View application logs
 fly ssh console  # SSH into your app for debugging
 ```
+
+**Troubleshooting Deployment Issues:**
+
+If you encounter health check timeouts or deployment failures:
+
+```bash
+# Check if your app is responding
+fly logs --app your-app-name
+
+# Check machine status
+fly status
+
+# If health checks are failing, try scaling down and up
+fly scale count 0
+fly scale count 1
+
+# For persistent issues, try restarting the app
+fly apps restart your-app-name
+```
+
+**Common Issues:**
+- **Health check timeout**: The app might be taking longer to start. This is normal for the first deployment.
+- **Old app name conflicts**: Update the `app` name in `fly.toml` to match your fly.io app name.
+- **Missing SESSION_SECRET**: Ensure you've set the session secret with `fly secrets set SESSION_SECRET="your-secret"`.
 
 #### Direct Deployment
 
