@@ -34,6 +34,8 @@ Preferred communication style: Simple, everyday language.
 - **Configuration Updates**: Updated default site title and all references across codebase
 - **Documentation Refresh**: Updated README.md, replit.md, and all template titles
 - **Brand Consistency**: Ensured consistent naming throughout application and documentation
+- **Fly.io Deployment**: Added comprehensive fly.io deployment instructions and configuration
+- **Production Ready**: Created fly.toml optimized for 2 VMs under free tier with proper scaling
 
 ## System Architecture
 

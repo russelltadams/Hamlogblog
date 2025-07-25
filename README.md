@@ -72,6 +72,74 @@ A Flask-based web application designed for amateur radio operators to manage the
    docker run -p 5000:5000 -e SESSION_SECRET="your-secret-key" qsowhat
    ```
 
+#### Fly.io Deployment (Recommended for Easy Cloud Hosting)
+
+Fly.io offers an excellent platform for deploying Flask applications with minimal configuration. The included `fly.toml` is optimized for two VMs running under the free tier.
+
+1. **Install flyctl CLI:**
+   ```bash
+   # macOS
+   brew install flyctl
+   
+   # Linux/WSL
+   curl -L https://fly.io/install.sh | sh
+   
+   # Windows
+   iwr https://fly.io/install.ps1 -useb | iex
+   ```
+
+2. **Sign up and authenticate:**
+   ```bash
+   fly auth signup  # or fly auth login if you have an account
+   ```
+
+3. **Deploy your application:**
+   ```bash
+   # Clone and navigate to the project
+   git clone <your-repository-url>
+   cd qsowhat
+   
+   # Launch the app (this uses the included fly.toml)
+   fly launch --no-deploy
+   
+   # Set a secure session secret
+   fly secrets set SESSION_SECRET="$(openssl rand -hex 32)"
+   
+   # Deploy
+   fly deploy
+   ```
+
+4. **Access your application:**
+   ```bash
+   fly open  # Opens your app in the browser
+   ```
+
+**Free Tier Configuration:**
+- The included `fly.toml` is configured for 2 VMs with 256MB RAM each
+- Auto-scaling: scales down to 0 when idle, scales up on demand
+- Free tier includes 160GB-hours per month (sufficient for most amateur radio logs)
+- Includes health checks and automatic HTTPS
+
+**Data Persistence:**
+QSOWhat uses JSON files for data storage. On Fly.io, data persists across deployments but may be lost if machines are destroyed. For production use with valuable log data, consider:
+
+```bash
+# Create a persistent volume for data storage (optional)
+fly volumes create qsowhat_data --region ord --size 1
+
+# Then modify fly.toml to mount the volume
+# Add to your fly.toml under [mounts]:
+# source = "qsowhat_data"
+# destination = "/app/data"
+```
+
+**Updating your deployment:**
+```bash
+fly deploy  # Deploy changes
+fly logs    # View application logs
+fly ssh console  # SSH into your app for debugging
+```
+
 #### Direct Deployment
 
 1. **Install dependencies and set up environment variables**
@@ -97,6 +165,9 @@ A Flask-based web application designed for amateur radio operators to manage the
 #### Environment Variables
 
 - `SESSION_SECRET`: Required for secure sessions (generate a random string)
+  - For fly.io: Set using `fly secrets set SESSION_SECRET="$(openssl rand -hex 32)"`
+  - For Docker: Pass as `-e SESSION_SECRET="your-secret-key"`
+  - For direct deployment: Export in your shell or use a .env file
 - `FLASK_ENV`: Set to `production` for production deployments
 
 ## Admin Guide

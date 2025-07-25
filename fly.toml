@@ -1,0 +1,70 @@
+# fly.toml app configuration file for QSOWhat
+# Configured for 2 VMs under Fly.io free tier
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+
+app = 'qsowhat'
+primary_region = 'ord'
+
+[build]
+
+[http_service]
+  internal_port = 5000
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+[[vm]]
+  memory = '256mb'
+  cpu_kind = 'shared'
+  cpus = 1
+
+# Configure scaling for free tier (2 VMs max)
+[scaling]
+  min_machines_running = 0
+  max_machines_running = 2
+
+[env]
+  # Note: Set SESSION_SECRET using: fly secrets set SESSION_SECRET="$(openssl rand -hex 32)"
+  # The default below should be overridden in production
+
+[[services]]
+  protocol = "tcp"
+  internal_port = 5000
+  processes = ["app"]
+
+  [[services.ports]]
+    port = 80
+    handlers = ["http"]
+    force_https = true
+
+  [[services.ports]]
+    port = 443
+    handlers = ["tls", "http"]
+
+  [services.concurrency]
+    type = "connections"
+    hard_limit = 25
+    soft_limit = 20
+
+[[services.tcp_checks]]
+  interval = "15s"
+  timeout = "2s"
+  grace_period = "1s"
+  port = 5000
+
+[[services.http_checks]]
+  interval = "10s"
+  timeout = "2s"
+  grace_period = "1s"
+  method = "get"
+  path = "/"
+  protocol = "http"
+  tls_skip_verify = false
+
+[deploy]
+  release_command = "python -c 'print(\"QSOWhat deployment starting...\")'"
+
+[processes]
+  app = "gunicorn --bind 0.0.0.0:5000 --workers 1 --timeout 30 --max-requests 1000 --max-requests-jitter 50 main:app"
