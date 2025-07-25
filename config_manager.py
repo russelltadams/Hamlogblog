@@ -1,4 +1,4 @@
-"""Configuration management for Hamlogblog application"""
+"""Configuration management for QSOWhat application"""
 import json
 import os
 from typing import Dict, Any
@@ -39,8 +39,8 @@ def get_default_config() -> Dict[str, Any]:
             "email": "operator@example.com"
         },
         "site": {
-            "title": "Amateur Radio Log",
-            "subtitle": "Ham Radio Log & Activities",
+            "title": "QSOWhat",
+            "subtitle": "Amateur Radio Log & Activities",
             "description": "Personal amateur radio logging and blog site",
             "admin_password": "changeme"
         },

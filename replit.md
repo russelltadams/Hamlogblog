@@ -1,8 +1,8 @@
-# Hamlogblog - Amateur Radio Log & Blog System
+# QSOWhat - Amateur Radio Log & Blog System
 
 ## Overview
 
-Hamlogblog is a Flask-based web application designed for amateur radio operators to manage their station logs and maintain a blog about their radio activities. The system provides ADIF file parsing, contact management, QSL card generation, and a simple blog platform, all integrated into a single amateur radio-focused website.
+QSOWhat is a Flask-based web application designed for amateur radio operators to manage their station logs and maintain a blog about their radio activities. The system provides ADIF file parsing, contact management, QSL card generation, and a simple blog platform, all integrated into a single amateur radio-focused website.
 
 ## User Preferences
 
@@ -28,6 +28,12 @@ Preferred communication style: Simple, everyday language.
 - **Clickable Navigation**: Made call signs, countries, and grid squares clickable for instant searches
 - **Grid Square Column**: Added grid square column to contact tables with clickable search functionality
 - **Enhanced Contact Details**: Added quick search buttons for related contacts by call, country, and grid
+
+### July 25, 2025
+- **Application Rename**: Completely renamed application from "Hamlogblog" to "QSOWhat"
+- **Configuration Updates**: Updated default site title and all references across codebase
+- **Documentation Refresh**: Updated README.md, replit.md, and all template titles
+- **Brand Consistency**: Ensured consistent naming throughout application and documentation
 
 ## System Architecture
 

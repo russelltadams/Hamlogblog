@@ -1,4 +1,4 @@
-# Hamlogblog - Amateur Radio Log & Blog System
+# QSOWhat - Amateur Radio Log & Blog System
 
 A Flask-based web application designed for amateur radio operators to manage their station logs and maintain a blog about their radio activities. Features ADIF file parsing, contact management, QSL card generation, and an integrated blog platform.
 
@@ -20,7 +20,7 @@ A Flask-based web application designed for amateur radio operators to manage the
 1. **Clone the repository:**
    ```bash
    git clone <repository-url>
-   cd hamlogblog
+   cd qsowhat
    ```
 
 2. **Install Python 3.11+** (if not already installed)
@@ -68,8 +68,8 @@ A Flask-based web application designed for amateur radio operators to manage the
 
 2. **Build and run:**
    ```bash
-   docker build -t hamlogblog .
-   docker run -p 5000:5000 -e SESSION_SECRET="your-secret-key" hamlogblog
+   docker build -t qsowhat .
+   docker run -p 5000:5000 -e SESSION_SECRET="your-secret-key" qsowhat
    ```
 
 #### Direct Deployment
@@ -166,7 +166,7 @@ The application uses a `config.json` file to store all station and site settings
 ### Architecture Overview
 
 ```
-hamlogblog/
+qsowhat/
 ├── main.py              # Application entry point
 ├── app.py              # Flask app configuration and setup
 ├── routes.py           # All URL routes and view functions

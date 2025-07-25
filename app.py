@@ -10,7 +10,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 # create the app
 app = Flask(__name__)
-app.secret_key = os.environ.get("SESSION_SECRET", "hamlogblog-default-secret-key")
+app.secret_key = os.environ.get("SESSION_SECRET", "qsowhat-default-secret-key")
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 
 # Configure upload settings
@@ -18,7 +18,7 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 app.config['UPLOAD_FOLDER'] = 'uploads'
 
 # Load configuration
-app.config['HAMLOG_CONFIG'] = load_config()
+app.config['QSOWHAT_CONFIG'] = load_config()
 
 # Admin credentials from config
 ADMIN_USERNAME = get_config_value('station.call_sign', 'N0CALL')
@@ -42,7 +42,7 @@ def admin_required(f):
 def inject_config():
     """Make config values available in all templates"""
     return {
-        'config': app.config['HAMLOG_CONFIG'],
+        'config': app.config['QSOWHAT_CONFIG'],
         'get_config': get_config_value
     }
 
